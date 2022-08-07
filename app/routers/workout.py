@@ -6,9 +6,6 @@ from .. import database, schemas, models, oauth2
 
 from fastapi import Depends, APIRouter
 
-import sys
-sys.path.append("..")
-
 router = APIRouter(
     tags=['workouts']
 )
@@ -44,8 +41,7 @@ def get_single_workout(id: int, response: Response, db: Session = Depends(databa
 
 @router.delete('/workouts/{id}')
 def delete_workout_by_id(id: int, db: Session = Depends(database.get_db),
-                      current_user: int = Depends(oauth2.get_current_user)):
-
+                         current_user: int = Depends(oauth2.get_current_user)):
     workout_query = db.query(models.WorkoutBase).filter(models.WorkoutBase.id == id)
 
     workout = workout_query.first()
@@ -61,15 +57,14 @@ def delete_workout_by_id(id: int, db: Session = Depends(database.get_db),
 
 @router.put('/workouts/{id}')
 def update_workout_by_id(id: int, updated_workout: schemas.Workout,
-                      db: Session = Depends(database.get_db),
-                      user_id: int = Depends(oauth2.get_current_user)):
+                         db: Session = Depends(database.get_db),
+                         user_id: int = Depends(oauth2.get_current_user)):
     print(user_id)
     workout_query = db.query(models.WorkoutBase).filter(models.WorkoutBase.id == id)
     workout = workout_query.first()
 
     if workout is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-
 
     workout_query.update(updated_workout.dict(), synchronize_session=False)
     db.commit()
