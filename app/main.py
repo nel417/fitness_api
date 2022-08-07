@@ -3,7 +3,6 @@ from . import models
 from .database import engine
 from .routers import workout, user, auth
 
-from .config import settings
 
 models.Base.metadata.create_all(bind=engine)
 
