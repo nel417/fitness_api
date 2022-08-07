@@ -42,3 +42,17 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     id: Optional[str] = None
+
+
+class Nutrition(BaseModel):
+    title: str
+    meal_number: int
+    calories: int
+    notes: Optional[str] = True
+
+
+class NutritionResponse(Nutrition):
+    owner_id: int
+
+    class Config:
+        orm_mode = True
